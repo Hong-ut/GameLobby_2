@@ -1,16 +1,16 @@
 //TODO: use Material UI (from videos)
 
 import { useContext } from 'react'
-import AppContext from './Context'
 import Select from 'react-select'
 import { Container } from '@material-ui/core'
+import { AppContext, AppContextProvider } from './Context'
 
 const Player = ({ player }) => { //onDelete is a function passed up (to the parent file)
     //onDelete = passed up (executed in parent func) while task = passed down (executed here)
     const {colors, setColors, players, setPlayers} = useContext(AppContext)
 
     return (
-        <Container maxWidth="ls">
+        <Container maxWidth="lg">
             <div className='container' style={{ backgroundColor: player.color }}>
                 <Select
                     options={colors}
