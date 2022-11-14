@@ -2,9 +2,7 @@
 
 import { useContext } from 'react'
 import Player from './Player'
-import AppContext from './Context';
-import { Button } from '@material-ui/core';
-
+import {AppContext, AppContextProvider} from './Context';
 
 const Lobby = () => {
     const {players} = useContext(AppContext)
