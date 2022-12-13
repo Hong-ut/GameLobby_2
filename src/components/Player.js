@@ -47,8 +47,10 @@ const Player = ({ player }) => { //onDelete is a function passed up (to the pare
             });
     }, [])
 
+
     useEffect(() => {
         console.log(postColorURL);
+        // ****************CORS POLICY ERRO WHEN THIS RUNS!!!*******************************************
         if (postColorURL != "") {
             axios.get(postColorURL)
                 .then(response => {
@@ -60,6 +62,8 @@ const Player = ({ player }) => { //onDelete is a function passed up (to the pare
         }
     }, [postColorURL]
     )
+    // ************************************************************************
+
 
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
 
