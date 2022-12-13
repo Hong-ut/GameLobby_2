@@ -5,9 +5,16 @@ import Select from 'react-select'
 import { Container } from '@material-ui/core'
 import { AppContext, AppContextProvider } from './Context'
 
+
 const Player = ({ player }) => { //onDelete is a function passed up (to the parent file)
     //onDelete = passed up (executed in parent func) while task = passed down (executed here)
     const {colors, setColors, players, setPlayers} = useContext(AppContext)
+    //const docRef = doc(db, 'users', auth.doc)
+    // use Axios to connect to cloud functions, which connects to firestore
+    // getcolors (getdoc from firestore), setcolors (updatedoc)
+    // URL => Axios side 
+
+    // const [playerColors, setPlayerColors] = useState([])
 
     return (
         <Container maxWidth="lg">

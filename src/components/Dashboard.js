@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import { auth, db, logout } from "../firebase";
 import { query, collection, getDocs, where } from "firebase/firestore";
+import Lobby from "./Lobby";
 
 function Dashboard() {
     const [user, loading, error] = useAuthState(auth);
@@ -28,18 +29,19 @@ function Dashboard() {
 
 
     return (
-        <div className="dashboard">
-            <div>Hong</div>
-
-            <div className="dashboard__container">
-                Logged in as
-                <div>{name}</div>
-                <div>{user?.email}</div>
-                <button className="dashboard__btn" onClick={logout}>
-                    Logout
-                </button>
+        <>
+            <div className="dashboard">
+                <div className="dashboard__container">
+                    Logged in as
+                    <div>{name}</div>
+                    <div>{user?.email}</div>
+                    <button className="dashboard__btn" onClick={logout}>
+                        Logout
+                    </button>
+                </div>
             </div>
-        </div>
+            < Lobby />
+        </>
     );
 }
 export default Dashboard;

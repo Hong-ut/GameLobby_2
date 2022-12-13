@@ -68,6 +68,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
             name,
             authProvider: "local",
             email,
+            player_colors: ['white', 'white', 'white', 'white'],
         });
     } catch (err) {
         console.error(err);
@@ -86,6 +87,7 @@ const sendPasswordReset = async (email) => {
 const logout = () => {
     signOut(auth);
 };
+
 export {
     auth,
     db,
