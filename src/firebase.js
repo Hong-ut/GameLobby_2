@@ -58,7 +58,7 @@ const logInWithEmailAndPassword = async (email, password) => {
         alert(err.message);
     }
 };
-const registerWithEmailAndPassword = async (name, email, password) => {
+const registerWithEmailAndPassword = async (name, email, password, picture) => {
     try {
         const res = await createUserWithEmailAndPassword(auth, email, password);
         // createUserWithEmailAndPassword(auth, email, password)
@@ -69,6 +69,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
             authProvider: "local",
             email,
             player_colors: ['white', 'white', 'white', 'white'],
+            picture,
         });
     } catch (err) {
         console.error(err);

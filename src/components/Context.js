@@ -1,8 +1,10 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db, logout } from "../firebase";
 
 const AppContext = createContext();
 
-const AppContextProvider = ({children}) => {
+const AppContextProvider = ({ children }) => {
     const [players, setPlayers] = useState([
         {
             id: 1,
@@ -21,16 +23,24 @@ const AppContextProvider = ({children}) => {
             color: 'white'
         }
     ]);
-    
+
     const [colors, setColors] = useState([
         { value: 'red', label: 'red', disabled: false },
         { value: 'blue', label: 'blue', disabled: false },
         { value: 'green', label: 'green', disabled: false },
         { value: 'purple', label: 'purple', disabled: false }
-      ]);
+    ]);
+
+    const [user, loading, error] = useAuthState(auth);
+    // const [docID, setDocID] = useState('');
+
+    // useEffect(
+    // )
+    // const [userEmail] = useState(user.email);
+
 
     return (
-        <AppContext.Provider value = {{players, setPlayers, colors, setColors}}>
+        <AppContext.Provider value={{ players, setPlayers, colors, setColors, user, loading }}>
             {children}
         </AppContext.Provider>
     );

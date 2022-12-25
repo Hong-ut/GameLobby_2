@@ -1,13 +1,13 @@
 //TODO: use Material UI (from videos)
 
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useNavigate } from 'react'
 import Select from 'react-select'
 import { Container } from '@material-ui/core'
 import { AppContext, AppContextProvider } from './Context'
 import axios from 'axios';
 
 
-const Player = ({ player }) => { //onDelete is a function passed up (to the parent file)
+const Player = ({ player, docID }) => { //onDelete is a function passed up (to the parent file)
     //onDelete = passed up (executed in parent func) while task = passed down (executed here)
     const { colors, setColors, players, setPlayers } = useContext(AppContext)
     //const docRef = doc(db, 'users', auth.doc)
@@ -15,14 +15,17 @@ const Player = ({ player }) => { //onDelete is a function passed up (to the pare
     // getcolors (getdoc from firestore), setcolors (updatedoc)
     // URL => Axios side 
 
-    const getColorURL = "https://us-central1-gamelobby-ecdf4.cloudfunctions.net/getColor?text=5qsdr5xIQRgFscpwOPvf";
     const [postColorURL, setPostColorURL] = useState('');
+    const [colorsDisabled, setcolorsDisabled] = useState([]);
+    const [currentUserDocID, setCurrentUserDocID] = useState('');
+    const [getColorURL, setGetColorURL] = useState(`https://us-central1-gamelobby-ecdf4.cloudfunctions.net/getColor?text=${docID}`);
+
     // user's saved colors
     useEffect(() => {
+        console.log(docID);
         axios.get(getColorURL)
             .then(response => {
                 const playerColors = response.data.result
-                console.log(response.data.result);
                 setPlayers([{
                     id: 1,
                     color: playerColors[0]
@@ -39,18 +42,46 @@ const Player = ({ player }) => { //onDelete is a function passed up (to the pare
                     id: 4,
                     color: playerColors[3]
                 }])
-                console.log("players: ", players)
-                console.log("colors: ", colors)
+
+                // disable the player colors saved from the firestore in the first render (when I use setstates sequentially instead of this approach, it only rerenders the changes made in the last setstate -> error)
+                if (playerColors.includes('red')) {
+                    colors[0].disabled = true;
+                }
+                if (playerColors.includes('blue')) {
+                    colors[1].disabled = true;
+                }
+                if (playerColors.includes('green')) {
+                    colors[2].disabled = true;
+                }
+                if (playerColors.includes('purple')) {
+                    colors[3].disabled = true;
+                }
+
             })
             .catch(error => {
                 // Handle any errors
             });
+
     }, [])
 
 
+    // map through colors and find the color whose color.value == e.value THEN color.disabled = true
+    useEffect(() => {
+        console.log("color Disabled: ", colorsDisabled);
+        // ***********************ERROR: ONLY THE LAST ELEMENT in colorsDisabled is being disabled in the beginning. 
+        // All colors in colorsDisabled should be disabled
+        for (let i = 0; i < colorsDisabled.length; i++) {
+            setColors(
+                colors.map((color) =>
+                    color.value === colorsDisabled[i] ? { ...color, disabled: true } : color
+                )
+            )
+            console.log(colorsDisabled[i], " has been disabled", colors)
+        }
+    }, [colorsDisabled])
+
     useEffect(() => {
         console.log(postColorURL);
-        // ****************CORS POLICY ERRO WHEN THIS RUNS!!!*******************************************
         if (postColorURL != "") {
             axios.get(postColorURL)
                 .then(response => {
@@ -62,7 +93,15 @@ const Player = ({ player }) => { //onDelete is a function passed up (to the pare
         }
     }, [postColorURL]
     )
-    // ************************************************************************
+
+
+
+    // setColors(
+    //     colors.map((color) =>
+    //         color.value === player.color ? { ...color, disabled: false }
+    //             : color
+    //     )
+    // )
 
 
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
@@ -89,13 +128,16 @@ const Player = ({ player }) => { //onDelete is a function passed up (to the pare
                             )
                         }
                         console.log("TEST: ", e.value, player.id);
-                        setPostColorURL(`https://us-central1-gamelobby-ecdf4.cloudfunctions.net/postColor?text=5qsdr5xIQRgFscpwOPvf,${player.id},${e.value}`);
+                        const ind = player.id - 1
+                        setPostColorURL(`https://us-central1-gamelobby-ecdf4.cloudfunctions.net/postColor?text=${docID},${ind},${e.value}`);
                         console.log(postColorURL);
                         // ****************
                         //QUESTION: WHY DOES the code below WORK? I didn't use setColors here...
                         //I didn't use setColors but colors (referred by e here) still changes...
                         // *************
-                        e.disabled = true;
+                        // e.disabled = true;
+                        setcolorsDisabled([e.value]);
+                        console.log(colors)
 
                     }}
                     isOptionDisabled={(option) => option.disabled}
