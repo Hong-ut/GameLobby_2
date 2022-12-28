@@ -55,7 +55,7 @@ function Dashboard() {
             {/* display docID of the user */}
             {/* <h1> {docRef}</h1> */}
 
-            < Lobby docID='5qsdr5xIQRgFscpwOPvf' />
+            {docRef !== "" && < Lobby docID={docRef}  />}
         </>
     );
 }

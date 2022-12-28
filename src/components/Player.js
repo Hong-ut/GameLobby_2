@@ -17,11 +17,13 @@ const Player = ({ player, docID }) => { //onDelete is a function passed up (to t
 
     const [postColorURL, setPostColorURL] = useState('');
     const [colorsDisabled, setcolorsDisabled] = useState([]);
-    const [currentUserDocID, setCurrentUserDocID] = useState('');
-    const [getColorURL, setGetColorURL] = useState(`https://us-central1-gamelobby-ecdf4.cloudfunctions.net/getColor?text=${docID}`);
+    const [getColorURL] = useState(`https://us-central1-gamelobby-ecdf4.cloudfunctions.net/getColor?text=${docID}`);
 
     // user's saved colors
     useEffect(() => {
+        colors.forEach((color)=>{
+            color.disabled = false;
+        })
         console.log(docID);
         axios.get(getColorURL)
             .then(response => {
@@ -71,11 +73,13 @@ const Player = ({ player, docID }) => { //onDelete is a function passed up (to t
         // ***********************ERROR: ONLY THE LAST ELEMENT in colorsDisabled is being disabled in the beginning. 
         // All colors in colorsDisabled should be disabled
         for (let i = 0; i < colorsDisabled.length; i++) {
-            setColors(
-                colors.map((color) =>
-                    color.value === colorsDisabled[i] ? { ...color, disabled: true } : color
+            if (colorsDisabled[i] !== 'white') {
+                setColors(
+                    colors.map((color) =>
+                        color.value === colorsDisabled[i] ? { ...color, disabled: true } : color
+                    )
                 )
-            )
+            }
             console.log(colorsDisabled[i], " has been disabled", colors)
         }
     }, [colorsDisabled])

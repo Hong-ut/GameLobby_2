@@ -28,7 +28,8 @@ const AppContextProvider = ({ children }) => {
         { value: 'red', label: 'red', disabled: false },
         { value: 'blue', label: 'blue', disabled: false },
         { value: 'green', label: 'green', disabled: false },
-        { value: 'purple', label: 'purple', disabled: false }
+        { value: 'purple', label: 'purple', disabled: false },
+        { value: 'white', label: 'Undecided'}
     ]);
 
     const [user, loading, error] = useAuthState(auth);
